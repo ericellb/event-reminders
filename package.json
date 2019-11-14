@@ -1,0 +1,34 @@
+{
+  "name": "event-reminders",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/app.ts",
+    "dev": "nodemon -e ts src/app.ts",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ericellb/event-reminders.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/sqlite3": "^3.1.5",
+    "@types/ws": "^6.0.3",
+    "nodemon": "^1.19.4",
+    "sqlite3": "^4.1.0",
+    "typescript": "^3.7.2",
+    "ws": "^7.2.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.22",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.1.0"
+  },
+  "bugs": {
+    "url": "https://github.com/ericellb/event-reminders/issues"
+  },
+  "homepage": "https://github.com/ericellb/event-reminders#readme"
+}
