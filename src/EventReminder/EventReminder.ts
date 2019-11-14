@@ -15,7 +15,7 @@ export class EventReminder {
       errors.error = 'Event name required';
     }
 
-    if (this.expiration < new Date()) {
+    if (new Date(this.expiration) < new Date()) {
       errors.error = 'Expiration date cannot be before current time';
     }
 

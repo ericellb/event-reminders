@@ -24,6 +24,7 @@ describe('Websocket Event Reminder Service Test', () => {
     expect.assertions(2);
     let createReminderCommand = { action: 'createReminder', payload: { event: 'Meeting @ 2PM', expiration: 'Nov-16-2019 17:45' } };
     let createReminderNotification = { action: 'createReminderNotification', payload: { event: 'Meeting @ 2PM', expiration: 'Nov-16-2019 17:45' } };
+
     ws.on('open', () => {
       ws.send(JSON.stringify(createReminderCommand));
     });
@@ -32,6 +33,38 @@ describe('Websocket Event Reminder Service Test', () => {
       let command = JSON.parse(message.toString());
       expect(command).toMatchObject(createReminderNotification);
       expect(command.payload).toHaveProperty('id');
+      done();
+    });
+  });
+
+  it('shouldnt be able to create an event remidner with already expired date', done => {
+    expect.assertions(1);
+    let expiredCreateReminderCommand = { action: 'createReminder', payload: { event: 'Meeting @ 2PM', expiration: 'Nov-10-2015 17:45' } };
+    let expiredCreateReminderNotification = { action: 'createReminderNotification', payload: { error: 'Expiration date cannot be before current time' } };
+
+    ws.on('open', () => {
+      ws.send(JSON.stringify(expiredCreateReminderCommand));
+    });
+
+    ws.on('message', message => {
+      let command = JSON.parse(message.toString());
+      expect(command).toMatchObject(expiredCreateReminderNotification);
+      done();
+    });
+  });
+
+  it('shouldnt be able to create an event reminder without a name', done => {
+    expect.assertions(1);
+    let expiredCreateReminderCommand = { action: 'createReminder', payload: { event: '', expiration: 'Nov-10-2020 17:45' } };
+    let expiredCreateReminderNotification = { action: 'createReminderNotification', payload: { error: 'Event name required' } };
+
+    ws.on('open', () => {
+      ws.send(JSON.stringify(expiredCreateReminderCommand));
+    });
+
+    ws.on('message', message => {
+      let command = JSON.parse(message.toString());
+      expect(command).toMatchObject(expiredCreateReminderNotification);
       done();
     });
   });

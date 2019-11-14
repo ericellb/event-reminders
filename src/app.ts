@@ -24,12 +24,11 @@ wss.on('connection', ws => {
       let eventReminder = new EventReminder(event, expiration);
       let res = await eventReminderService.createReminder(eventReminder);
       ws.send(res);
-      // Create the event in database
-      // Echo back createdEventNotication to client
     }
   });
 });
 
+// Parses incoming command
 const parseCommand = (message: WebSocket.Data) => {
   let command;
   try {
