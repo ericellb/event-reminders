@@ -1,0 +1,85 @@
+// System Design
+
+Web Service will listen on websockets for a EventReminer command
+EventReminer is JSON with a message, and expiration date
+
+When receiving a EventReminer, store it in sql for persistance (SQL used for ease of setup locally)
+
+Every minute we query sql for expired events
+Flag the message as expired
+Broadcast the EventReminer message to all connected clients
+
+If designing this to scale we would have one central EventManager
+EventManager would take care of querying for expired events,
+and sending off this notificaiton to each seperate EventReminder Web Service
+who would then broadcast to all their clients
+
+
+
+Commands from client to server
+
+  // Creates an Event Reminer with given name and expiration
+  {
+    action: 'createReminder'
+    payload: {
+      event: "Meeting @ 2PM",
+      expiration: "Nov-16-2019 17:45"
+    }
+  }
+
+  // Expires an event with given id
+  // This is only an endpoint to pass tests below!
+  {
+    action: 'expireReminder'
+    payload: {
+      id: 5
+    }
+  }
+
+Commands from server to client
+
+  // Sends a notification when Event Reminder is created
+  {
+    action: 'createReminderNotification'
+    payload: {
+      event: 'Meeting @ 2pm'
+      expiration: 'Nov-16-2019 17:45"
+      id: 5
+    }
+  }
+
+  // Sends a notification when an event expired
+  {
+    action: 'expireReminderNotification'
+    payload: {
+      event: 'Meeting @ 2pm'
+    }
+  }
+
+
+
+
+// What do we want our tests to do?
+
+  test_we_can_create_an_event
+  // We create an event with message and expire
+  // Server echos back that event was created 
+  // If message and expire the same, we created an event successfully
+
+  test_we_cant_create_an_event_with_past_expire
+  // We cant create an event with an expire time before now
+  // Server echos back an error
+
+  test_we_cant_create_an_event_without_req_data
+  // We cant create an event if missing message or expire
+  // Server echos back an error
+
+  test_we_can_get_an_expire_notification
+  // We create an event with message and expire
+  // We manually expire that reminer through a special endpoint
+  // We listen for the expire event 
+
+
+
+
+
