@@ -51,9 +51,10 @@ Expected Response
 
 ## Running the tests
 
-Run jest
+Run jest, tests require the service to be running
 
 ```
+npm start
 npm run test
 ```
 
