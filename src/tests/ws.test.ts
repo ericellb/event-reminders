@@ -22,8 +22,8 @@ describe('Websocket Event Reminder Service Test', () => {
 
   it('should be able to create an event reminder', done => {
     expect.assertions(2);
-    let createReminderCommand = { action: 'createReminder', payload: { event: 'Meeting @ 2PM', expiration: 'Nov-16-2019 17:45' } };
-    let createReminderNotification = { action: 'createReminderNotification', payload: { event: 'Meeting @ 2PM', expiration: 'Nov-16-2019 17:45' } };
+    let createReminderCommand = { action: 'createReminder', payload: { event: 'Meeting @ 2PM', expiration: 'Nov-16-2020 17:45' } };
+    let createReminderNotification = { action: 'createReminderNotification', payload: { event: 'Meeting @ 2PM', expiration: 'Nov-16-2020 17:45' } };
 
     ws.on('open', () => {
       ws.send(JSON.stringify(createReminderCommand));
@@ -68,10 +68,26 @@ describe('Websocket Event Reminder Service Test', () => {
       done();
     });
   });
-});
 
-// TESTS
-// can create an event
-// cannot create an event with already expired date
-// cannot create an event without required name / expiration
-// can get back expired notifcation when event expires
+  it('should receive an expire event notifically when manually expiring an evnet', done => {
+    expect.assertions(1);
+    let createReminderCommand = { action: 'createReminder', payload: { event: 'Meeting @ 2PM', expiration: 'Nov-16-2020 17:45' } };
+    let expireReminderCommand = { action: 'expireReminder', payload: { id: 0 } };
+    let expireReminderNotification = { action: 'expireReminderNotification', payload: { event: 'Meeting @ 2PM' } };
+
+    ws.on('open', () => {
+      ws.send(JSON.stringify(createReminderCommand));
+    });
+
+    ws.on('message', message => {
+      let command = JSON.parse(message.toString());
+      if (command.action === 'createReminderNotification') {
+        expireReminderCommand.payload.id = command.payload.id;
+        ws.send(JSON.stringify(expireReminderCommand));
+      } else if (command.action === 'expireReminderNotification') {
+        expect(command).toMatchObject(expireReminderNotification);
+        done();
+      }
+    });
+  });
+});

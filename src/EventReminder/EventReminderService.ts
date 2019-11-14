@@ -1,6 +1,6 @@
 import { EventReminderRepository } from './EventReminderRepository';
 import { EventReminder } from './EventReminder';
-import { CreateReminderNotification } from '../types';
+import { CreateReminderNotification, ExpireReminderNotification } from '../types';
 
 export class EventReminderService {
   private eventReminderRepo: EventReminderRepository;
@@ -23,6 +23,27 @@ export class EventReminderService {
       res.payload.event = eventReminder.event;
       res.payload.expiration = eventReminder.expiration;
       res.payload.id = row.id;
+    } catch (err) {
+      res.payload.error = err;
+    }
+
+    return JSON.stringify(res);
+  }
+
+  public async getReminder(reminderId: number) {
+    try {
+      let row = await this.eventReminderRepo.getById(reminderId);
+      return row.event;
+    } catch (err) {
+      return null;
+    }
+  }
+
+  public async expireReminder(reminderId: number, reminderName: string) {
+    let res: ExpireReminderNotification = { action: 'expireReminderNotification', payload: {} };
+    try {
+      await this.eventReminderRepo.expireById(reminderId);
+      res.payload.event = reminderName;
     } catch (err) {
       res.payload.error = err;
     }
