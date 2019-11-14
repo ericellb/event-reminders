@@ -32,6 +32,7 @@ describe('Websocket Event Reminder Service Test', () => {
       let command = JSON.parse(message.toString());
       expect(command).toMatchObject(createReminderNotification);
       expect(command.payload).toHaveProperty('id');
+      done();
     });
   });
 });
