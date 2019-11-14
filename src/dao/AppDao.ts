@@ -42,4 +42,20 @@ export class AppDAO {
       });
     });
   }
+
+  // Gets all results
+  public all<T>(sql: string, params: any = []) {
+    return new Promise<T>((resolve, reject) => {
+      this.db.all(sql, params, function(err: any, rows: T) {
+        console.log(rows);
+        if (err) {
+          console.log('Error running sql : ' + sql);
+          console.log(err);
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+  }
 }

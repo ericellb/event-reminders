@@ -41,4 +41,14 @@ export class EventReminderRepository {
       throw new Error(err);
     }
   }
+
+  public async getAllExpired() {
+    try {
+      let sql = "select * from event_reminders WHERE expiration < date('now') AND expired=0";
+      let result = await this.dao.all<EventReminderRow[]>(sql);
+      return result;
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
 }

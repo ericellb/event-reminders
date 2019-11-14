@@ -30,7 +30,7 @@ export class EventReminderService {
     return JSON.stringify(res);
   }
 
-  public async getReminder(reminderId: number) {
+  public async getById(reminderId: number) {
     try {
       let row = await this.eventReminderRepo.getById(reminderId);
       return row.event;
@@ -39,7 +39,7 @@ export class EventReminderService {
     }
   }
 
-  public async expireReminder(reminderId: number, reminderName: string) {
+  public async expireById(reminderId: number, reminderName: string) {
     let res: ExpireReminderNotification = { action: 'expireReminderNotification', payload: {} };
     try {
       await this.eventReminderRepo.expireById(reminderId);
@@ -49,5 +49,9 @@ export class EventReminderService {
     }
 
     return JSON.stringify(res);
+  }
+
+  public async getAllExpired() {
+    return await this.eventReminderRepo.getAllExpired();
   }
 }

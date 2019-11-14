@@ -22,8 +22,8 @@ describe('Websocket Event Reminder Service Test', () => {
 
   it('should be able to create an event reminder', done => {
     expect.assertions(2);
-    let createReminderCommand = { action: 'createReminder', payload: { event: 'Meeting @ 2PM', expiration: 'Nov-16-2020 17:45' } };
-    let createReminderNotification = { action: 'createReminderNotification', payload: { event: 'Meeting @ 2PM', expiration: 'Nov-16-2020 17:45' } };
+    let createReminderCommand = { action: 'createReminder', payload: { event: 'Meeting @ 2PM', expiration: '2020-10-10 17:45' } };
+    let createReminderNotification = { action: 'createReminderNotification', payload: { event: 'Meeting @ 2PM', expiration: '2020-10-10 17:45' } };
 
     ws.on('open', () => {
       ws.send(JSON.stringify(createReminderCommand));
@@ -39,7 +39,7 @@ describe('Websocket Event Reminder Service Test', () => {
 
   it('shouldnt be able to create an event remidner with already expired date', done => {
     expect.assertions(1);
-    let expiredCreateReminderCommand = { action: 'createReminder', payload: { event: 'Meeting @ 2PM', expiration: 'Nov-10-2015 17:45' } };
+    let expiredCreateReminderCommand = { action: 'createReminder', payload: { event: 'Meeting @ 2PM', expiration: '2010-10-10 17:45' } };
     let expiredCreateReminderNotification = { action: 'createReminderNotification', payload: { error: 'Expiration date cannot be before current time' } };
 
     ws.on('open', () => {
@@ -55,7 +55,7 @@ describe('Websocket Event Reminder Service Test', () => {
 
   it('shouldnt be able to create an event reminder without a name', done => {
     expect.assertions(1);
-    let expiredCreateReminderCommand = { action: 'createReminder', payload: { event: '', expiration: 'Nov-10-2020 17:45' } };
+    let expiredCreateReminderCommand = { action: 'createReminder', payload: { event: '', expiration: '2020-10-10 17:45' } };
     let expiredCreateReminderNotification = { action: 'createReminderNotification', payload: { error: 'Event name required' } };
 
     ws.on('open', () => {
@@ -71,7 +71,7 @@ describe('Websocket Event Reminder Service Test', () => {
 
   it('should receive an expire event notifically when manually expiring an evnet', done => {
     expect.assertions(1);
-    let createReminderCommand = { action: 'createReminder', payload: { event: 'Meeting @ 2PM', expiration: 'Nov-16-2020 17:45' } };
+    let createReminderCommand = { action: 'createReminder', payload: { event: 'Meeting @ 2PM', expiration: '2020-10-10 17:45' } };
     let expireReminderCommand = { action: 'expireReminder', payload: { id: 0 } };
     let expireReminderNotification = { action: 'expireReminderNotification', payload: { event: 'Meeting @ 2PM' } };
 
