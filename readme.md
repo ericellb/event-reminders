@@ -1,6 +1,6 @@
-# Flightbook
+# Event Reminders
 
-> Trip building and navigating web service with frontend allowing you to choose Oneway, Roundtrip and Multi city trips.
+> Web Socket Event Reminder service
 
 ## Getting Started
 
